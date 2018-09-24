@@ -8,13 +8,21 @@ if tf.gfile.Exists(log_dir):
     tf.gfile.DeleteRecursively(log_dir)
 tf.gfile.MakeDirs(log_dir)
 
-# 定数で1 + 2
-x = tf.constant(1, name='x')
-y = tf.constant(2, name='y')
-z = x + y
 
-# このコマンドでzをグラフ上に出力
-_ = tf.summary.scalar('z', z)
+#add_scopeという名称でグルーピング
+with tf.name_scope('add_scope'):
+
+    # 定数で1 + 2
+    x = tf.constant(1, name='x')
+    y = tf.constant(2, name='y')
+    z = x + y
+
+    # このコマンドでzをグラフ上に出力
+    _ = tf.summary.scalar('z', z)
+
+    # 上の結果に掛け算
+    with tf.name_scope('multiply_scope'):
+        zz = y * z
 
 # SummaryWriterでグラフを書く(これより後のコマンドはグラフに出力されない)
 summary_writer = tf.summary.FileWriter(log_dir , sess.graph)
